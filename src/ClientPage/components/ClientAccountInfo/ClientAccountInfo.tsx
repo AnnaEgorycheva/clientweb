@@ -1,24 +1,46 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import API from '../../api/api';
-import { IHistory } from '../../api/types';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { IAccount } from '../../api/types';
+import { State, Type } from '../../constant/constant';
 import { userAccounts, userInfo } from '../../constData/constData';
+import API from '../../api/api';
 
 const titleData = {
-    first: 'Показать историю операция счета клиента: ',
-    second: 'История операций счета № ', 
+    first: 'Показать информацию о конкретном счете клиента: ',
+    second: 'Информация о счете № ', 
     third: 'Неправильно введен номер счета'
 }
 
-const HistoryOperationAccounts: React.FC = () => {
+const ClientAccountInfo: React.FC = () => {
     const [title, setTitle] = useState<string>(titleData.first);
     const [numberAccount, setNumberAccount] = useState<string>();
     const [showInfo, setShowInfo] = useState<boolean>(false);
-    const [history, setHistory] = useState<IHistory>();
+    const [account, setAccount] = useState<IAccount[]>();
 
     const onChange = useCallback((value: string) => {
         setNumberAccount(value);
     }, []);
-    
+
+    const show = async () => {
+        setShowInfo(true);
+        setTitle(titleData.second + numberAccount);
+
+        if (numberAccount) {
+            const accounts = await API.getAccount(userInfo.userId, parseInt(numberAccount));
+            setAccount(accounts.data);
+            //setAccount(userAccounts.accounts.filter(item => item.accountNumber.toString() === numberAccount));
+        }
+        else {
+            setTitle(titleData.third);
+        }
+    };
+
+    const hide = useCallback(() => {
+        setTitle(titleData.first);
+        setShowInfo(false);
+        setNumberAccount(undefined);
+        setAccount(undefined);
+    }, []);
+
     const inputBlock = useMemo(() => {
         return (
             <input 
@@ -31,28 +53,7 @@ const HistoryOperationAccounts: React.FC = () => {
                 style={{ marginRight: '10px', marginBlock: '10px', padding: '5px' }}
             />
         );
-    }, []);
-
-    const show = async () => {
-        setShowInfo(true);
-        setTitle(titleData.second + numberAccount);
-
-        if (numberAccount) {
-            //const result = await API.getHistory(userInfo.userId, parseInt(numberAccount), 1);
-            //setHistory(result.data);
-        }
-        else {
-            setTitle(titleData.third);
-        }
-    };
-
-    const hide = useCallback(() => {
-        setTitle(titleData.first);
-        setShowInfo(false);
-        setNumberAccount(undefined);
-        setHistory(undefined);
-    }, []);
-
+    }, []);   
 
     return (
         <blockquote style={{ background: '#FFFFFF', border: 'solid', borderColor: '#000080', padding: '10px' }}>
@@ -69,12 +70,11 @@ const HistoryOperationAccounts: React.FC = () => {
                 title='Скрыть' 
                 style={{ background: '#DCDCDC', borderWidth: 2, marginBlock: '10px', padding: '5px', borderRadius: 5 }}
             >Скрыть</button>)}
-            {showInfo && (<p style={{ margin: '0px' }}>Номер счета: {numberAccount}</p>)}
-            {showInfo && (history?.operations.map(item => {
-                return (<p style={{ margin: '0px'}}>Дата операции: {item.dateTime}, сумма: {item.transactionAmount}</p>)
+            {showInfo && (account?.map(item => {
+                return (<p style={{ margin: '0px'}}>Номер счета: {item.accountNumber}<br/>Тип счета: {Type[item.type]}<br/>Статус счета: {State[item.state]}<br/>Баланс: {item.balance}</p>)
             }))}
         </blockquote>
     );
 }
 
-export default HistoryOperationAccounts;
+export default ClientAccountInfo;

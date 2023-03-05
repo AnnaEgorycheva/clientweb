@@ -1,31 +1,24 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React from 'react';
 import Credit from './components/Credit/Credit';
-import CustomerAccountInfo from './components/CustomerAccountInfo/CustomerAccountInfo';
-import CustomerAccounts from './components/CustomerAccounts/CustomerAccounts';
-import CustomerInformation from './components/CustomerInformation/CustomerInformation';
+import ClientAccountInfo from './components/ClientAccountInfo/ClientAccountInfo';
 import HistoryOperationAccounts from './components/HistoryOperationAccounts/HistoryOperationAccounts';
+import ClientAccounts from './components/ClientAccounts/ClientAccounts';
+import ClientInformation from './components/ClientInformation/ClientInformation';
+import CreateAccount from './components/CreateAccount/CreateAccount';
+import ClosedAccount from './components/ClosedAccount/ClosedAccount';
+import Operation from './components/Operation/Operation';
 
-const ClientPage = () => {
-    const [jk, kl] = useState<string>('hh');
-    console.log(jk);
-
+const ClientPage: React.FC = () => {
     return (
         <>
-            <CustomerInformation/>
-            <CustomerAccounts/>
-            <CustomerAccountInfo/>
+            <ClientInformation/>
+            <ClientAccounts/>
+            <ClientAccountInfo/>
+            <CreateAccount/>
+            <ClosedAccount/>
+            <Operation/>
             <HistoryOperationAccounts/>
             <Credit/>
-
-            <blockquote style={{ background: '#98FB98', border: 'solid' }}>
-                Внести деньги<br/>
-                <button>Внести деньги</button>
-            </blockquote>
-
-            <blockquote style={{ background: '#98FB98', border: 'solid' }}>
-                Снять деньги<br/>
-                <button>снять деньги</button>
-            </blockquote>
         </>
     );
 }
