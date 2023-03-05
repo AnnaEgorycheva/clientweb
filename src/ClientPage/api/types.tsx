@@ -20,3 +20,8 @@ export interface IOperation {
 export interface IHistory {
     operations: IOperation[],
 }
+
+export interface ICredit {
+    title: string,
+    isActive: number,
+}

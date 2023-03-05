@@ -6,7 +6,7 @@ class API{
     
     credit = 'http://localhost:7239/';
 
-    //GET информация о ккредитах
+    //GET информация о кредитах
     async getCreditRates(){
         const res = await fetch(this.credit + `api/CreditRate/AllCreditRates`).then(response => 
             response.json()
