@@ -72,6 +72,18 @@ class API{
         return res;
 	}
 
+    //POST взять кредит
+    async takeCredit(userId: string, credit: string, numberAccount: number, date: string, paymentTerm: number, loanAmount: number){
+        const body = {
+            maturityDate: date,
+            paymentTerm: paymentTerm,
+            loanAmount: loanAmount,
+        };
+        const blob = new Blob([JSON.stringify(body, null, 2)], {type : 'application/json'});
+		const res = await fetch(this.core + `api/UserCredit/${credit}/takeCredit?userId=${userId}&accountNum=${numberAccount}`, {method: 'post', body: blob }).then(res=>res.json());
+        return res;
+	}
+
     //PUT изменить статус счета
     async changeAccountState(userId: string, state: number, id: number){
 		const res = await fetch(this.core + `api/account/${id}/edit?UserID=${userId}&accountState=${state}`, {method: 'put' }).then(res=>res.json());

@@ -24,4 +24,5 @@ export interface IHistory {
 export interface ICredit {
     title: string,
     isActive: number,
+    creditRateId: string,
 }
