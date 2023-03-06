@@ -11,21 +11,21 @@ const titleData = {
 
 const HistoryOperationAccounts: React.FC = () => {
     const [title, setTitle] = useState<string>(titleData.first);
-    const [numberAccount, setNumberAccount] = useState<string>();
+    const [numberAccount, setNumberAccount] = useState<number>();
     const [showInfo, setShowInfo] = useState<boolean>(false);
     const [history, setHistory] = useState<IHistory>();
 
-    const onChange = useCallback((value: string) => {
+    const onChange = useCallback((value: number) => {
         setNumberAccount(value);
     }, []);
     
     const inputBlock = useMemo(() => {
         return (
             <input 
-                type='text'
+                type='number'
                 value={numberAccount} 
                 onChange={(event) => {
-                    onChange(event.target.value);
+                    onChange(parseInt(event.target.value));
                 }}
                 placeholder='Введите номер'
                 style={{ marginRight: '10px', marginBlock: '10px', padding: '5px' }}
@@ -38,8 +38,8 @@ const HistoryOperationAccounts: React.FC = () => {
         setTitle(titleData.second + numberAccount);
 
         if (numberAccount) {
-            //const result = await API.getHistory(userInfo.userId, parseInt(numberAccount), 1);
-            //setHistory(result.data);
+            const result = await API.getHistory(userInfo.userId, numberAccount, 1);
+            setHistory(result.data);
         }
         else {
             setTitle(titleData.third);
